@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { usePageTitle } from '../../Hooks/usePageTitle'
-import DashboardHeader from '../../Components/General/DashboardHeader'
+import Header from '../../Components/General/Header'
 import ChatSidebar from '../../Components/Chat/ChatSidebar'
 import ChatWindow from '../../Components/Chat/ChatWindow'
 
@@ -50,7 +50,7 @@ function Chat() {
 
     return (
         <div className="min-h-screen bg-gray-900 text-white">
-            <DashboardHeader />
+            <Header />
             
             <div className="flex h-[calc(100vh-4rem)]">
                 {/* Chat Sidebar */}

@@ -1,13 +1,19 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useAuth } from '../../contexts/AuthContext'
 
 function Header() {
     const location = useLocation()
+    const { user, signOut } = useAuth()
     
     const isActive = (path: string) => {
         if (path === '/') {
             return location.pathname === '/'
         }
         return location.pathname.startsWith(path)
+    }
+
+    const handleLogout = async () => {
+        await signOut()
     }
 
     return (
@@ -42,16 +48,76 @@ function Header() {
                 >
                 About
                 </Link>
+                
+                {/* Authenticated Navigation */}
+                {user && (
+                    <>
+                        <Link 
+                            to="/chats" 
+                            className={`transition-colors duration-200 ${
+                                isActive('/chats') 
+                                    ? 'text-blue-400 font-medium' 
+                                    : 'text-gray-300 hover:text-white'
+                            }`}
+                        >
+                        Chats
+                        </Link>
+                        <Link 
+                            to="/dashboard" 
+                            className={`transition-colors duration-200 ${
+                                isActive('/dashboard') 
+                                    ? 'text-blue-400 font-medium' 
+                                    : 'text-gray-300 hover:text-white'
+                            }`}
+                        >
+                        Dashboard
+                        </Link>
+                    </>
+                )}
             </nav>
             
-            {/* CTA Buttons */}
+            {/* Right Side Actions */}
             <div className="flex items-center space-x-4">
-                <Link 
-                to="/dashboard" 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200"
-                >
-                Get Started
-                </Link>
+                {user ? (
+                    // Authenticated User Actions
+                    <>
+                        {/* Profile Button */}
+                        <Link 
+                            to="/profile" 
+                            className={`flex items-center space-x-2 transition-colors duration-200 ${
+                                isActive('/profile') 
+                                    ? 'text-blue-400' 
+                                    : 'text-gray-300 hover:text-white'
+                            }`}
+                        >
+                            <img 
+                                src={user.image || '/default-avatar.png'} 
+                                alt="Profile" 
+                                className="w-8 h-8 rounded-full"
+                                onError={(e) => {
+                                    e.currentTarget.src = '/default-avatar.png'
+                                }}
+                            />
+                            <span className="hidden sm:block">{user.name}</span>
+                        </Link>
+                        
+                        {/* Logout Button */}
+                        <button 
+                            onClick={handleLogout}
+                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 cursor-pointer"
+                        >
+                            Logout
+                        </button>
+                    </>
+                ) : (
+                    // Non-authenticated CTA
+                    <Link 
+                        to="/login" 
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 cursor-pointer"
+                    >
+                        Get Started
+                    </Link>
+                )}
             </div>
             </div>
         </div>

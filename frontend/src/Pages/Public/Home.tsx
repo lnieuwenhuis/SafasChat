@@ -1,6 +1,7 @@
 import Header from '../../Components/General/Header'
 import Footer from '../../Components/General/Footer'
 import { usePageTitle } from '../../Hooks/usePageTitle'
+import { Link } from 'react-router-dom'
 
 function Home() {
     usePageTitle('Home')
@@ -25,10 +26,13 @@ function Home() {
                 No signups, no subscriptions, just AI conversation.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 transform hover:scale-105">
+                <Link 
+                    to="/login" 
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 transform hover:scale-105 inline-block text-center cursor-pointer"
+                >
                     Try It Out
-                </button>
-                <a href="https://github.com/lnieuwenhuis/SafasChat" target="_blank" rel="noopener noreferrer" className="border border-gray-600 hover:border-gray-500 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 hover:bg-gray-800 inline-block">
+                </Link>
+                <a href="https://github.com/lnieuwenhuis/SafasChat" target="_blank" rel="noopener noreferrer" className="border border-gray-600 hover:border-gray-500 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 hover:bg-gray-800 inline-block cursor-pointer">
                     View on GitHub
                 </a>
                 </div>
@@ -120,9 +124,12 @@ function Home() {
             <p className="text-xl mb-8 opacity-90">
                 It's free, simple, and might be useful for your next AI conversation.
             </p>
-            <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors duration-200 transform hover:scale-105">
+            <Link 
+                to="/login" 
+                className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors duration-200 transform hover:scale-105 inline-block cursor-pointer"
+            >
                 Start Chatting
-            </button>
+            </Link>
             </div>
         </section>
         

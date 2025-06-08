@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { usePageTitle } from '../../Hooks/usePageTitle'
-import DashboardHeader from '../../Components/General/DashboardHeader'
+import Header from '../../Components/General/Header'
 
 function Dashboard() {
     usePageTitle('Dashboard')
@@ -9,7 +9,7 @@ function Dashboard() {
     return (
         <div className="min-h-screen bg-gray-900 text-white">
             {/* Dashboard Header */}
-            <DashboardHeader />
+            <Header />
             
             {/* Navigation Tabs */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-">
