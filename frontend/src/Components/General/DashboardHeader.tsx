@@ -1,6 +1,12 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 function DashboardHeader() {
+    const location = useLocation()
+    
+    const isActive = (path: string) => {
+        return location.pathname === path
+    }
+    
     const handleLogout = () => {
         // TODO: Implement logout functionality
         console.log('Logout clicked')
@@ -18,16 +24,44 @@ function DashboardHeader() {
             
             {/* Navigation */}
             <nav className="hidden md:flex space-x-8">
-                <Link to="/" className="text-gray-300 hover:text-white transition-colors duration-200">
+                <Link 
+                    to="/" 
+                    className={`transition-colors duration-200 ${
+                        isActive('/') 
+                            ? 'text-blue-400 font-medium' 
+                            : 'text-gray-300 hover:text-white'
+                    }`}
+                >
                 Home
                 </Link>
-                <Link to="/about" className="text-gray-300 hover:text-white transition-colors duration-200">
+                <Link 
+                    to="/about" 
+                    className={`transition-colors duration-200 ${
+                        isActive('/about') 
+                            ? 'text-blue-400 font-medium' 
+                            : 'text-gray-300 hover:text-white'
+                    }`}
+                >
                 About
                 </Link>
-                <Link to="/dashboard" className="text-blue-400 hover:text-blue-300 transition-colors duration-200 font-medium">
+                <Link 
+                    to="/dashboard" 
+                    className={`transition-colors duration-200 ${
+                        isActive('/dashboard') 
+                            ? 'text-blue-400 font-medium' 
+                            : 'text-gray-300 hover:text-white'
+                    }`}
+                >
                 Dashboard
                 </Link>
-                <Link to="/chats" className="text-gray-300 hover:text-white transition-colors duration-200">
+                <Link 
+                    to="/chats" 
+                    className={`transition-colors duration-200 ${
+                        isActive('/chats') 
+                            ? 'text-blue-400 font-medium' 
+                            : 'text-gray-300 hover:text-white'
+                    }`}
+                >
                 Chats
                 </Link>
             </nav>
@@ -37,7 +71,11 @@ function DashboardHeader() {
                 {/* Profile Button */}
                 <Link 
                 to="/profile" 
-                className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-200"
+                className={`flex items-center space-x-2 transition-colors duration-200 ${
+                    isActive('/profile') 
+                        ? 'text-blue-400' 
+                        : 'text-gray-300 hover:text-white'
+                }`}
                 >
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                     <span className="text-white font-bold text-sm">U</span>
