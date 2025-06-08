@@ -1,6 +1,15 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 function Header() {
+    const location = useLocation()
+    
+    const isActive = (path: string) => {
+        if (path === '/') {
+            return location.pathname === '/'
+        }
+        return location.pathname.startsWith(path)
+    }
+
     return (
         <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,18 +22,26 @@ function Header() {
             
             {/* Navigation */}
             <nav className="hidden md:flex space-x-8">
-                <Link to="/" className="text-gray-300 hover:text-white transition-colors duration-200">
+                <Link 
+                    to="/" 
+                    className={`transition-colors duration-200 ${
+                        isActive('/') 
+                            ? 'text-blue-400 font-medium' 
+                            : 'text-gray-300 hover:text-white'
+                    }`}
+                >
                 Home
                 </Link>
-                <Link to="/about" className="text-gray-300 hover:text-white transition-colors duration-200">
+                <Link 
+                    to="/about" 
+                    className={`transition-colors duration-200 ${
+                        isActive('/about') 
+                            ? 'text-blue-400 font-medium' 
+                            : 'text-gray-300 hover:text-white'
+                    }`}
+                >
                 About
                 </Link>
-                <a href="#features" className="text-gray-300 hover:text-white transition-colors duration-200">
-                Features
-                </a>
-                <a href="#models" className="text-gray-300 hover:text-white transition-colors duration-200">
-                Models
-                </a>
             </nav>
             
             {/* CTA Buttons */}

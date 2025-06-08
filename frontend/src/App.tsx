@@ -1,9 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Home from './Pages/Home'
-import About from './Pages/About'
-import Privacy from './Pages/Privacy'
-import Terms from './Pages/Terms'
-import Dashboard from './Pages/Dashboard'
+import Home from './Pages/Public/Home'
+import About from './Pages/Public/About'
+import Privacy from './Pages/Public/Privacy'
+import Terms from './Pages/Public/Terms'
+import Dashboard from './Pages/Protected/Dashboard'
+import Chat from './Pages/Protected/Chat'
+import NotFound from './Pages/Public/404'
 import ProtectedRoutes from './Components/Routes/ProtectedRoutes'
 
 function App() {
@@ -15,13 +17,18 @@ function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
 
-        <Route path="/*" element={
+        <Route path="/dashboard" element={
           <ProtectedRoutes>
-            <Routes>
-              <Route path="/dashboard" element={<Dashboard />} />
-            </Routes>
+            <Dashboard />
           </ProtectedRoutes>
         } />
+        <Route path="/chats" element={
+          <ProtectedRoutes>
+            <Chat />
+          </ProtectedRoutes>
+        } />
+        
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )

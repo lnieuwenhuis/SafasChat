@@ -1,6 +1,6 @@
-import Header from '../Components/General/Header'
-import Footer from '../Components/General/Footer'
-import { usePageTitle } from '../Hooks/usePageTitle'
+import Header from '../../Components/General/Header'
+import Footer from '../../Components/General/Footer'
+import { usePageTitle } from '../../Hooks/usePageTitle'
 
 function Terms() {
     usePageTitle('Terms')
