@@ -2,7 +2,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './Components/Home'
 import About from './Components/About'
 import Dashboard from './Components/Dashboard'
-import ProtectedRoute from './Components/ProtectedRoute'
+import Profile from './Components/Profile'
+import Settings from './Components/Settings'
+import ProtectedRoutes from './Components/ProtectedRoutes'
 
 function App() {
   return (
@@ -10,14 +12,16 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        <Route 
-          path="/dashboard" 
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } 
-        />
+
+        <Route path="/*" element={
+          <ProtectedRoutes>
+            <Routes>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings />} />
+            </Routes>
+          </ProtectedRoutes>
+        } />
       </Routes>
     </BrowserRouter>
   )

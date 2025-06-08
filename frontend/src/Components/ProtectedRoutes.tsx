@@ -1,13 +1,13 @@
 import type { ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
 
-interface ProtectedRouteProps {
+interface ProtectedRoutesProps {
     children: ReactNode
 }
 
-function ProtectedRoute({ children }: ProtectedRouteProps) {
+function ProtectedRoutes({ children }: ProtectedRoutesProps) {
     // Replace this with your actual authentication logic
-    const isAuthenticated = false // This should come from your auth context/state
+    const isAuthenticated = true // This should come from your auth context/state
     
     if (!isAuthenticated) {
         return <Navigate to="/" replace />
@@ -16,4 +16,4 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <>{children}</>
 }
 
-export default ProtectedRoute
+export default ProtectedRoutes
