@@ -16,19 +16,6 @@
 - ⚡ **Fast & Lightweight** - Built with modern web technologies
 - 🔒 **Privacy-Focused** - Your conversations stay private
 
-## 🚀 Supported AI Models
-
-SafasChat provides access to these free AI models through OpenRouter:
-
-- **Llama 3.2 3B** (Meta)
-- **Llama 3.1 8B** (Meta)
-- **Qwen 2.5 7B** (Alibaba)
-- **Mistral 7B** (Mistral AI)
-- **Gemma 2 9B** (Google)
-- **Phi-3 Mini** (Microsoft)
-- **CodeLlama 7B** (Meta)
-- **And more...**
-
 ## 🛠️ Tech Stack
 
 ### Frontend
