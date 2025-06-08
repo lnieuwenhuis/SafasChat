@@ -4,7 +4,7 @@ import About from './Pages/About'
 import Privacy from './Pages/Privacy'
 import Terms from './Pages/Terms'
 import Dashboard from './Pages/Dashboard'
-import ProtectedRoutes from './Components/ProtectedRoutes'
+import ProtectedRoutes from './Components/Routes/ProtectedRoutes'
 
 function App() {
   return (

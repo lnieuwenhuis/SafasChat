@@ -7,9 +7,7 @@ const Footer: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">SC</span>
-                </div>
+                <img src="/favicon.png" alt="SafasChat Logo" className="w-8 h-8" />
                 <span className="text-white text-xl font-bold">SafasChat</span>
             </div>
             <div className="flex space-x-6">
