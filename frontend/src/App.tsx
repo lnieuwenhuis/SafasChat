@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './Components/Home'
 import About from './Components/About'
+import Privacy from './Components/Privacy'
+import Terms from './Components/Terms'
 import Dashboard from './Components/Dashboard'
-import Profile from './Components/Profile'
-import Settings from './Components/Settings'
 import ProtectedRoutes from './Components/ProtectedRoutes'
 
 function App() {
@@ -12,13 +12,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
 
         <Route path="/*" element={
           <ProtectedRoutes>
             <Routes>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/settings" element={<Settings />} />
             </Routes>
           </ProtectedRoutes>
         } />

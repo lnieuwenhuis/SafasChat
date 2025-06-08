@@ -1,6 +1,10 @@
 import Header from './Header'
+import Footer from './Footer'
+import { usePageTitle } from '../Hooks/usePageTitle'
 
 function Home() {
+    usePageTitle('Home')
+    
     return (
         <div className="min-h-screen bg-gray-900 text-white">
         <Header />
@@ -11,18 +15,18 @@ function Home() {
             <div className="text-center">
                 <h1 className="text-5xl md:text-7xl font-bold mb-6">
                 <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                    AI Chat
+                    SafasChat
                 </span>
                 <br />
-                <span className="text-white">Reimagined</span>
+                <span className="text-white">Simple AI Chat</span>
                 </h1>
                 <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-                Experience the future of AI conversation with our free, open-source platform. 
-                Access multiple cutting-edge AI models in one beautiful interface.
+                A free, simple way to chat with different AI models in one place. 
+                No signups, no subscriptions, just AI conversation.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 transform hover:scale-105">
-                    Start Chatting Free
+                    Try It Out
                 </button>
                 <a href="https://github.com/lnieuwenhuis/SafasChat" target="_blank" rel="noopener noreferrer" className="border border-gray-600 hover:border-gray-500 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 hover:bg-gray-800 inline-block">
                     View on GitHub
@@ -42,8 +46,8 @@ function Home() {
         <section id="features" className="py-24 bg-gray-800">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold mb-4">Why Choose SafasChat?</h2>
-                <p className="text-xl text-gray-300">Built for developers, designed for everyone</p>
+                <h2 className="text-4xl font-bold mb-4">What Makes It Nice</h2>
+                <p className="text-xl text-gray-300">Simple features for a simple tool</p>
             </div>
             
             <div className="grid md:grid-cols-3 gap-8">
@@ -51,8 +55,8 @@ function Home() {
                 <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
                     <span className="text-2xl">🆓</span>
                 </div>
-                <h3 className="text-xl font-semibold mb-3">100% Free</h3>
-                <p className="text-gray-300">No hidden costs, no premium tiers. Access all AI models completely free, forever.</p>
+                <h3 className="text-xl font-semibold mb-3">Completely Free</h3>
+                <p className="text-gray-300">Uses free AI models from OpenRouter. No hidden costs or premium features.</p>
                 </div>
                 
                 <div className="bg-gray-900 p-8 rounded-xl border border-gray-700">
@@ -60,7 +64,7 @@ function Home() {
                     <span className="text-2xl">🔓</span>
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Open Source</h3>
-                <p className="text-gray-300">Fully transparent, community-driven development. Contribute, customize, and extend.</p>
+                <p className="text-gray-300">All code is public. Fork it, improve it, or just see how it works.</p>
                 </div>
                 
                 <div className="bg-gray-900 p-8 rounded-xl border border-gray-700">
@@ -68,7 +72,7 @@ function Home() {
                     <span className="text-2xl">🤖</span>
                 </div>
                 <h3 className="text-xl font-semibold mb-3">Multiple Models</h3>
-                <p className="text-gray-300">Access GPT, Claude, Gemini, and more AI models in one unified interface.</p>
+                <p className="text-gray-300">Try different AI models like Llama, Mistral, and others in one place.</p>
                 </div>
             </div>
             </div>
@@ -78,8 +82,8 @@ function Home() {
         <section id="models" className="py-24">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-                <h2 className="text-4xl font-bold mb-4">Supported AI Models</h2>
-                <p className="text-xl text-gray-300">Choose from the best (free) AI models available</p>
+                <h2 className="text-4xl font-bold mb-4">Available AI Models</h2>
+                <p className="text-xl text-gray-300">Free models you can chat with right now</p>
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -110,39 +114,19 @@ function Home() {
         </section>
         
         {/* CTA Section */}
-        <section className="py-24 bg-gradient-to-r from-blue-600 to-purple-600">
+        <section className="py-24 bg-gradient-to-r from-blue-600 to-purple-600 text-center">
             <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold mb-4">Ready to Start Chatting?</h2>
+            <h2 className="text-4xl font-bold mb-4">Give It a Try</h2>
             <p className="text-xl mb-8 opacity-90">
-                Join thousands of users already experiencing the future of AI conversation.
+                It's free, simple, and might be useful for your next AI conversation.
             </p>
             <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors duration-200 transform hover:scale-105">
-                Get Started Now
+                Start Chatting
             </button>
             </div>
         </section>
         
-        {/* Footer */}
-        <footer className="bg-gray-900 border-t border-gray-800 py-12">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-                <div className="flex items-center space-x-2 mb-4 md:mb-0">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">SC</span>
-                </div>
-                <span className="text-white text-xl font-bold">SafasChat</span>
-                </div>
-                <div className="flex space-x-6">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">Privacy</a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200">Terms</a>
-                <a href="https://github.com/lnieuwenhuis/SafasChat" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors duration-200">GitHub</a>
-                </div>
-            </div>
-            <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-                <p>&copy; 2024 SafasChat. Open source and free forever.</p>
-            </div>
-            </div>
-        </footer>
+        <Footer />
         </div>
     )
 }
