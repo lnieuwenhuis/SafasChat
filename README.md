@@ -29,20 +29,6 @@ SafasChat provides access to these free AI models through OpenRouter:
 - **CodeLlama 7B** (Meta)
 - **And more...**
 
-## 🏗️ Project Structure
-SafasChat/
-├── frontend/               # React + TypeScript frontend
-│   ├── src/
-│   │   ├── Components/     # React components
-│   │   ├── App.tsx         # Main app with routing
-│   │   └── ...
-│   ├── package.json
-│   └── README.md
-├── backend/                # (Coming soon) Backend API
-├── LICENSE
-└── README.md               # This file
-
-
 ## 🛠️ Tech Stack
 
 ### Frontend
