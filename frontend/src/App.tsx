@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Home from './Components/Home'
-import About from './Components/About'
-import Privacy from './Components/Privacy'
-import Terms from './Components/Terms'
-import Dashboard from './Components/Dashboard'
+import Home from './Pages/Home'
+import About from './Pages/About'
+import Privacy from './Pages/Privacy'
+import Terms from './Pages/Terms'
+import Dashboard from './Pages/Dashboard'
 import ProtectedRoutes from './Components/ProtectedRoutes'
 
 function App() {

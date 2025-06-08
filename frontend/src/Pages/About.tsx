@@ -1,5 +1,5 @@
-import Header from './Header'
-import Footer from './Footer'
+import Header from '../Components/Header'
+import Footer from '../Components/Footer'
 import { usePageTitle } from '../Hooks/usePageTitle'
 
 function About() {
