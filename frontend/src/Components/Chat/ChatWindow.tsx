@@ -35,7 +35,7 @@ const FREE_MODELS = [
         description: 'Qwen distilled version of Deepseek R1',
         speed: 'Medium',
         quality: 'High',
-        reasoning: false
+        reasoning: true
     },
     { 
         id: 'deepseek/deepseek-r1-distill-llama-70b:free', 
@@ -43,7 +43,7 @@ const FREE_MODELS = [
         description: 'Llama distilled version of Deepseek R1',
         speed: 'Medium',
         quality: 'Very High',
-        reasoning: false
+        reasoning: true
     },
     { 
         id: 'mistralai/mistral-7b-instruct:free', 
