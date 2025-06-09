@@ -1,51 +1,28 @@
-import { useState } from 'react'
 import { usePageTitle } from '../../Hooks/usePageTitle'
 import Header from '../../Components/General/Header'
 import ChatSidebar from '../../Components/Chat/ChatSidebar'
 import ChatWindow from '../../Components/Chat/ChatWindow'
-
-interface Chat {
-    id: string
-    title: string
-    lastMessage: string
-    timestamp: string
-    model: string
-}
+import { useChat } from '../../Hooks/useChat'
 
 function Chat() {
     usePageTitle('Chat')
-    const [selectedChatId, setSelectedChatId] = useState<string | null>(null)
     
-    // Mock data - replace with actual data fetching
-    const [chats] = useState<Chat[]>([
-        {
-            id: '1',
-            title: 'Getting Started with React',
-            lastMessage: 'How do I create a new React component?',
-            timestamp: '2 minutes ago',
-            model: 'GPT-4'
-        },
-        {
-            id: '2',
-            title: 'TypeScript Questions',
-            lastMessage: 'What are the benefits of using TypeScript?',
-            timestamp: '1 hour ago',
-            model: 'Claude'
-        },
-        {
-            id: '3',
-            title: 'CSS Styling Help',
-            lastMessage: 'How can I center a div?',
-            timestamp: '3 hours ago',
-            model: 'GPT-3.5'
-        }
-    ])
+    const {
+        chats,
+        currentChatId,
+        messages,
+        isStreaming,
+        createNewChat,
+        selectChat,
+        sendMessage,
+        deleteChat,
+        stopStreaming
+    } = useChat()
 
-    const selectedChat = chats.find(chat => chat.id === selectedChatId)
+    const selectedChat = chats.find(chat => chat.id === currentChatId)
 
-    const handleNewChat = () => {
-        // TODO: Implement new chat creation
-        console.log('Creating new chat...')
+    const handleNewChat = async () => {
+        await createNewChat('New Chat', 'deepseek/deepseek-chat-v3-0324:free')
     }
 
     return (
@@ -56,14 +33,19 @@ function Chat() {
                 {/* Chat Sidebar */}
                 <ChatSidebar 
                     chats={chats}
-                    selectedChatId={selectedChatId}
-                    onSelectChat={setSelectedChatId}
+                    selectedChatId={currentChatId}
+                    onSelectChat={selectChat}
                     onNewChat={handleNewChat}
+                    onDeleteChat={deleteChat}
                 />
                 
                 {/* Chat Window */}
                 <ChatWindow 
                     selectedChat={selectedChat}
+                    messages={messages}
+                    isStreaming={isStreaming}
+                    onSendMessage={sendMessage}
+                    onStopStreaming={stopStreaming}
                     onNewChat={handleNewChat}
                 />
             </div>
