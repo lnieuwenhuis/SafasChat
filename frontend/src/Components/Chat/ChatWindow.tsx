@@ -82,7 +82,7 @@ function ModelDropdown({ selectedModel, onModelChange, disabled = false }: {
             <button
                 onClick={() => !disabled && setIsOpen(!isOpen)}
                 disabled={disabled}
-                className="flex items-center justify-between w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed min-w-[280px]"
+                className="flex items-center justify-between w-full bg-slate-700 border border-purple-600/30 rounded-lg px-4 py-1 text-white hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed min-w-[280px]"
             >
                 <div className="text-left">
                     <div className="text-sm font-medium">{selectedModelData.name}</div>
@@ -103,7 +103,7 @@ function ModelDropdown({ selectedModel, onModelChange, disabled = false }: {
             </button>
             
             {isOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+                <div className="absolute top-full left-0 right-0 mt-1 bg-slate-800 border border-purple-600/30 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto">
                     {FREE_MODELS.map((model) => (
                         <div
                             key={model.id}
@@ -111,8 +111,8 @@ function ModelDropdown({ selectedModel, onModelChange, disabled = false }: {
                                 onModelChange(model.id)
                                 setIsOpen(false)
                             }}
-                            className={`p-4 py-2 hover:bg-gray-700 cursor-pointer border-b border-gray-700 last:border-b-0 ${
-                                model.id === selectedModel ? 'bg-gray-700' : ''
+                            className={`p-4 py-2 hover:bg-slate-700 cursor-pointer border-b border-purple-700/30 last:border-b-0 ${
+                                model.id === selectedModel ? 'bg-slate-700' : ''
                             }`}
                         >
                             <div className="flex items-start justify-between">
@@ -125,7 +125,7 @@ function ModelDropdown({ selectedModel, onModelChange, disabled = false }: {
                                         <span 
                                             className={`px-2 py-0.5 rounded cursor-help text-xs ${
                                                 model.speed === 'Very Fast' ? 'bg-green-900 text-green-300' :
-                                                model.speed === 'Fast' ? 'bg-blue-900 text-blue-300' :
+                                                model.speed === 'Fast' ? 'bg-purple-900 text-purple-300' :
                                                 'bg-yellow-900 text-yellow-300'
                                             }`}
                                             title={`Speed: ${model.speed} - How quickly the model responds to queries`}
@@ -245,7 +245,7 @@ function ChatWindow({ selectedChat, messages, isStreaming, onSendMessage, onStop
     return (
         <div className="flex-1 flex flex-col bg-gray-900">
             {/* Chat Header */}
-            <div className="bg-gray-800 border-b border-gray-700 p-4">
+            <div className="bg-gray-800 border-b border-gray-700 py-2 px-4">
                 <div className="flex items-center justify-between">
                     <div>
                         <h2 className="text-lg font-semibold text-white">{selectedChat.title}</h2>

@@ -35,7 +35,7 @@ function Header() {
     }, [])
 
     return (
-        <header className="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
+        <header className="bg-slate-900 border-b border-purple-800/30 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -126,10 +126,10 @@ function Header() {
                         
                         {/* Dropdown Menu */}
                         {isDropdownOpen && (
-                            <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-700 py-1 z-50">
+                            <div className="absolute right-0 mt-2 w-48 bg-slate-800 rounded-lg shadow-lg border border-purple-700/30 py-1 z-50">
                                 <Link 
                                     to="/profile" 
-                                    className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200"
+                                    className="flex items-center px-4 py-2 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors duration-200"
                                     onClick={() => setIsDropdownOpen(false)}
                                 >
                                     <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +139,7 @@ function Header() {
                                 </Link>
                                 <Link 
                                     to="/settings" 
-                                    className="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200"
+                                    className="flex items-center px-4 py-2 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors duration-200"
                                     onClick={() => setIsDropdownOpen(false)}
                                 >
                                     <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -151,7 +151,7 @@ function Header() {
                                 <hr className="border-gray-700 my-1" />
                                 <button 
                                     onClick={handleLogout}
-                                    className="flex items-center w-full px-4 py-2 text-red-400 hover:bg-gray-700 hover:text-red-300 transition-colors duration-200 cursor-pointer"
+                                    className="flex items-center w-full px-4 py-2 text-red-400 hover:bg-slate-700 hover:text-red-300 transition-colors duration-200 cursor-pointer"
                                 >
                                     <svg className="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -165,7 +165,7 @@ function Header() {
                     // Non-authenticated CTA
                     <Link 
                         to="/login" 
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 cursor-pointer"
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 cursor-pointer"
                     >
                         Get Started
                     </Link>

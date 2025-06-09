@@ -61,7 +61,7 @@ function ChatSidebar({ chats, selectedChatId, onSelectChat, onNewChat, onDeleteC
     }
 
     return (
-        <div className="w-80 bg-gray-800 border-r border-gray-700 flex flex-col">
+        <div className="w-80 bg-slate-800 border-r border-purple-700/30 flex flex-col">
             {/* Header */}
             <div className="p-4 border-b border-gray-700">
                 <div className="flex items-center justify-between mb-4">
@@ -108,10 +108,10 @@ function ChatSidebar({ chats, selectedChatId, onSelectChat, onNewChat, onDeleteC
                             <div className="flex items-start justify-between">
                                 <div className="flex-1 min-w-0">
                                     <h3 className="text-white font-medium truncate">{chat.title}</h3>
-                                    <p className="text-gray-400 text-sm truncate mt-1">{getLastMessage(chat)}</p>
+                                    <p className="text-slate-400 text-sm truncate mt-1">{getLastMessage(chat)}</p>
                                     <div className="flex items-center justify-between mt-2">
-                                        <span className="text-xs text-gray-500">{getTimestamp(chat)}</span>
-                                        <span className="text-xs bg-gray-600 text-gray-300 px-2 py-1 rounded">{chat.model}</span>
+                                        <span className="text-xs text-slate-500">{getTimestamp(chat)}</span>
+                                        <span className="text-xs bg-slate-600 text-slate-300 px-2 py-1 rounded">{chat.model}</span>
                                     </div>
                                 </div>
                                 {onDeleteChat && (
@@ -120,7 +120,7 @@ function ChatSidebar({ chats, selectedChatId, onSelectChat, onNewChat, onDeleteC
                                             e.stopPropagation()
                                             onDeleteChat(chat.id!)
                                         }}
-                                        className="ml-2 text-gray-400 hover:text-red-400 transition-colors"
+                                        className="ml-2 text-slate-400 hover:text-red-400 transition-colors"
                                         title="Delete chat"
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
