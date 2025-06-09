@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, type KeyboardEvent } from 'react'
 import { type Chat, type Message } from '../../lib/database'
 import MessageComponent from './MessageComponent'
 
@@ -191,7 +191,7 @@ function ChatWindow({ selectedChat, messages, isStreaming, onSendMessage, onStop
         await onSendMessage(messageContent, apiKey, selectedModel)
     }
 
-    const handleKeyPress = (e: React.KeyboardEvent) => {
+    const handleKeyPress = (e: KeyboardEvent) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault()
             handleSendMessage()

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, type FC } from 'react';
 import { Link } from 'react-router-dom';
 import { usePageTitle } from '../../Hooks/usePageTitle';
 
@@ -10,7 +10,7 @@ const messages = [
     "The page you're looking for is in another castle 🏰"
 ];
 
-const NotFound: React.FC = () => {
+const NotFound: FC = () => {
     usePageTitle('404 - Page Not Found | SafasChat');
     const [catPosition, setCatPosition] = useState({ x: 50, y: 50 });
     const [clicks, setClicks] = useState(0);

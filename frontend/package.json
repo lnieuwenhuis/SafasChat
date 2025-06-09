@@ -13,7 +13,7 @@
     "@tailwindcss/vite": "^4.1.8",
     "@types/node": "^22.15.30",
     "@types/react-router-dom": "^5.3.3",
-    "@types/react-syntax-highlighter": "^15.5.13",
+    "@uiw/react-md-editor": "^4.0.7",
     "better-auth": "^1.2.8",
     "dexie": "^4.0.11",
     "mysql2": "^3.14.1",
@@ -21,7 +21,6 @@
     "react-dom": "^19.1.0",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.6.2",
-    "react-syntax-highlighter": "^15.6.1",
     "tailwindcss": "^4.1.8"
   },
   "devDependencies": {
