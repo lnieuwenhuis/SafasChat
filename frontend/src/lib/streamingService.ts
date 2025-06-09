@@ -4,6 +4,7 @@ interface StreamingOptions {
     apiKey: string
     reasoning?: boolean
     onChunk: (chunk: string) => void
+    onReasoning?: (reasoning: string) => void
     onComplete: () => void
     onError: (error: Error) => void
 }
@@ -87,8 +88,15 @@ export class StreamingService {
                 try {
                     const parsed = JSON.parse(data)
                     const content = parsed.choices[0]?.delta?.content
+                    const reasoning = parsed.choices[0]?.delta?.reasoning
+                    
                     if (content) {
-                    onChunk(content)
+                        onChunk(content)
+                    }
+                    
+                    // Handle reasoning tokens separately
+                    if (reasoning && options.onReasoning) {
+                        options.onReasoning(reasoning)
                     }
                 } catch (e) {
                     console.error('Error parsing JSON:', e)

@@ -91,7 +91,7 @@ export const useChat = () => {
     // Send message with streaming
     const sendMessage = useCallback(async (content: string, apiKey: string, model: string) => {
         if (!currentChatId || isStreaming) return
-
+    
         // Check if this is the first message in the chat
         const existingMessages = await db.messages
             .where('chatId')
@@ -99,19 +99,19 @@ export const useChat = () => {
             .count()
         
         const isFirstMessage = existingMessages === 0
-
+    
         const userMessage: Message = {
             chatId: currentChatId,
             content,
             role: 'user',
             timestamp: new Date()
         }
-
+    
         // Add user message to database and state
         const userMessageId = await db.messages.add(userMessage)
         const userMessageWithId = { ...userMessage, id: userMessageId }
         setMessages(prev => [...prev, userMessageWithId])
-
+    
         // Generate title if this is the first message
         if (isFirstMessage) {
             try {
@@ -125,48 +125,54 @@ export const useChat = () => {
                 console.error('Error updating title:', error)
             }
         }
-
+    
         // Create assistant message placeholder
         const assistantMessage: Message = {
             chatId: currentChatId,
             content: '',
             role: 'assistant',
             timestamp: new Date(),
-            isStreaming: true
+            isStreaming: true,
+            reasoning: '' // Initialize reasoning field
         }
-
+    
         const assistantMessageId = await db.messages.add(assistantMessage)
         const assistantMessageWithId = { ...assistantMessage, id: assistantMessageId }
         setMessages(prev => [...prev, assistantMessageWithId])
-
+    
         setIsStreaming(true)
-
+    
         // Get chat context
         const chatMessages = await db.messages
             .where('chatId')
             .equals(currentChatId)
             .sortBy('timestamp')
-
+    
         const contextMessages = chatMessages
             .filter(msg => !msg.isStreaming)
             .map(msg => ({ role: msg.role, content: msg.content }))
-
+    
         // Update the chat's model if it's different
         const currentChat = await db.chats.get(currentChatId)
         if (currentChat && currentChat.model !== model) {
             await db.chats.update(currentChatId, { model })
         }
-
+    
         let accumulatedContent = ''
-
+        let accumulatedReasoning = ''
+    
+        // Check if the model supports reasoning
+        const modelSupportsReasoning = model.includes('o1') || model.includes('reasoning')
+    
         streamingService.streamChat({
             model,
             messages: contextMessages,
             apiKey,
+            reasoning: modelSupportsReasoning,
             onChunk: async (chunk: string) => {
                 accumulatedContent += chunk
                 
-                // Update message in database and state
+                // Update message content in database and state
                 await db.messages.update(assistantMessageId, { 
                     content: accumulatedContent 
                 })
@@ -177,15 +183,31 @@ export const useChat = () => {
                         : msg
                 ))
             },
-            onComplete: async () => {
-                // Mark streaming as complete
+            onReasoning: async (reasoning: string) => {
+                accumulatedReasoning += reasoning
+                
+                // Update reasoning in database and state
                 await db.messages.update(assistantMessageId, { 
+                    reasoning: accumulatedReasoning 
+                })
+                
+                setMessages(prev => prev.map(msg => 
+                    msg.id === assistantMessageId 
+                        ? { ...msg, reasoning: accumulatedReasoning }
+                        : msg
+                ))
+            },
+            onComplete: async () => {
+                // Mark streaming as complete and save final content and reasoning
+                await db.messages.update(assistantMessageId, { 
+                    content: accumulatedContent,
+                    reasoning: accumulatedReasoning,
                     isStreaming: false 
                 })
                 
                 setMessages(prev => prev.map(msg => 
                     msg.id === assistantMessageId 
-                        ? { ...msg, isStreaming: false }
+                        ? { ...msg, content: accumulatedContent, reasoning: accumulatedReasoning, isStreaming: false }
                         : msg
                 ))
                 

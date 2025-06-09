@@ -33,7 +33,7 @@ const FREE_MODELS = [
         id: 'deepseek/deepseek-r1-distill-qwen-32b:free', 
         name: 'DeepSeek R1 Qwen 32B',
         description: 'Qwen distilled version of Deepseek R1',
-        speed: 'Medium',
+        speed: 'Fast',
         quality: 'High',
         reasoning: true
     },

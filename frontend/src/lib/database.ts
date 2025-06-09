@@ -15,7 +15,8 @@ export interface Chat {
     role: 'user' | 'assistant'
     timestamp: Date
     isStreaming?: boolean
-    }
+    reasoning?: string 
+}
 
     export class ChatDatabase extends Dexie {
     chats!: Table<Chat>
