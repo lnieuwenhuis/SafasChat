@@ -7,9 +7,10 @@ interface ChatSidebarProps {
     onSelectChat: (chatId: number) => void
     onNewChat: () => void
     onDeleteChat?: (chatId: number) => void
+    onCloseSidebar?: () => void
 }
 
-function ChatSidebar({ chats, selectedChatId, onSelectChat, onNewChat, onDeleteChat }: ChatSidebarProps) {
+function ChatSidebar({ chats, selectedChatId, onSelectChat, onNewChat, onDeleteChat, onCloseSidebar }: ChatSidebarProps) {
     const [lastMessages, setLastMessages] = useState<Record<number, string>>({})
 
     // Load last messages for all chats
@@ -61,20 +62,31 @@ function ChatSidebar({ chats, selectedChatId, onSelectChat, onNewChat, onDeleteC
     }
 
     return (
-        <div className="w-80 bg-slate-800 border-r border-purple-700/30 flex flex-col">
+        <div className="w-full h-full bg-slate-800 border-r border-purple-700/30 flex flex-col">
             {/* Header */}
             <div className="p-4 border-b border-gray-700">
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-bold text-white">Chats</h2>
-                    <button
-                        onClick={onNewChat}
-                        className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors duration-200"
-                        title="New Chat"
-                    >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                        </svg>
-                    </button>
+                    <div className="flex items-center space-x-2">
+                        <button
+                            onClick={onNewChat}
+                            className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-colors duration-200"
+                            title="New Chat"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                            </svg>
+                        </button>
+                        {/* Close button for mobile */}
+                        <button
+                            onClick={onCloseSidebar}
+                            className="md:hidden text-gray-400 hover:text-white p-2 rounded-lg transition-colors duration-200"
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
                 
                 {/* Search */}
@@ -101,18 +113,23 @@ function ChatSidebar({ chats, selectedChatId, onSelectChat, onNewChat, onDeleteC
                         <div
                             key={chat.id}
                             onClick={() => onSelectChat(chat.id!)}
-                            className={`p-4 border-b border-gray-700 cursor-pointer transition-colors duration-200 hover:bg-gray-700 ${
-                                selectedChatId === chat.id ? 'bg-gray-700 border-l-4 border-l-blue-500' : ''
-                            }`}
+                            className={`
+                                p-4 border-b border-gray-700 cursor-pointer transition-colors duration-200
+                                hover:bg-slate-700
+                                ${selectedChatId === chat.id ? 'bg-slate-700 border-l-4 border-l-blue-500' : ''}
+                            `}
                         >
                             <div className="flex items-start justify-between">
                                 <div className="flex-1 min-w-0">
-                                    <h3 className="text-white font-medium truncate">{chat.title}</h3>
-                                    <p className="text-slate-400 text-sm truncate mt-1">{getLastMessage(chat)}</p>
-                                    <div className="flex items-center justify-between mt-2">
-                                        <span className="text-xs text-slate-500">{getTimestamp(chat)}</span>
-                                        <span className="text-xs bg-slate-600 text-slate-300 px-2 py-1 rounded">{chat.model}</span>
-                                    </div>
+                                    <h3 className="text-white font-medium truncate">
+                                        {chat.title}
+                                    </h3>
+                                    <p className="text-gray-400 text-sm mt-1 line-clamp-2">
+                                        {getLastMessage(chat)}
+                                    </p>
+                                    <p className="text-gray-500 text-xs mt-1">
+                                        {getTimestamp(chat)}
+                                    </p>
                                 </div>
                                 {onDeleteChat && (
                                     <button
@@ -120,8 +137,8 @@ function ChatSidebar({ chats, selectedChatId, onSelectChat, onNewChat, onDeleteC
                                             e.stopPropagation()
                                             onDeleteChat(chat.id!)
                                         }}
-                                        className="ml-2 text-slate-400 hover:text-red-400 transition-colors"
-                                        title="Delete chat"
+                                        className="text-gray-400 hover:text-red-400 p-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                                        title="Delete Chat"
                                     >
                                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
