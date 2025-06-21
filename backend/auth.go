@@ -48,8 +48,9 @@ func NewAuthService(db *sql.DB) *AuthService {
 	clientId := os.Getenv("GOOGLE_CLIENT_ID")
 	clientSecret := os.Getenv("GOOGLE_CLIENT_SECRET")
 	backendURL := os.Getenv("BACKEND_URL")
+	frontendURL := os.Getenv("FRONTEND_URL")
 
-	if clientId == "" || clientSecret == "" || backendURL == "" {
+	if clientId == "" || clientSecret == "" || backendURL == "" || frontendURL == "" {
 		panic("Missing required environment variables")
 	}
 
@@ -93,6 +94,8 @@ func (a *AuthService) SignInSocial(c *gin.Context) {
 }
 
 func (a *AuthService) GoogleCallback(c *gin.Context) {
+	frontendURL := os.Getenv("FRONTEND_URL")
+
 	code := c.Query("code")
 	if code == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "No code provided"})
@@ -136,10 +139,10 @@ func (a *AuthService) GoogleCallback(c *gin.Context) {
 	}
 
 	// Set session cookie
-	c.SetCookie("session_id", session.ID, int(time.Hour*24*7/time.Second), "/", "localhost", false, true)
+	c.SetCookie("session_id", session.ID, int(time.Hour*24*7/time.Second), "/", frontendURL, false, true)
 
 	// Redirect to frontend chats
-	c.Redirect(http.StatusFound, "http://localhost:5173/chats")
+	c.Redirect(http.StatusFound, frontendURL + "/chats")
 }
 
 func (a *AuthService) GetSession(c *gin.Context) {
@@ -166,6 +169,8 @@ func (a *AuthService) GetSession(c *gin.Context) {
 }
 
 func (a *AuthService) SignOut(c *gin.Context) {
+	frontendURL := os.Getenv("FRONTEND_URL")
+	
 	sessionID, err := c.Cookie("session_id")
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{"success": true})
@@ -180,7 +185,7 @@ func (a *AuthService) SignOut(c *gin.Context) {
 	}
 
 	// Clear cookie
-	c.SetCookie("session_id", "", -1, "/", "localhost", false, true)
+	c.SetCookie("session_id", "", -1, "/", frontendURL, false, true)
 
 	c.JSON(http.StatusOK, gin.H{"success": true})
 }
