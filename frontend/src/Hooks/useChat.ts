@@ -20,8 +20,21 @@ export const useChat = () => {
         if (!user) return
         
         try {
-            // First, load existing local chats
-            const localChats = await db.chats.orderBy('updatedAt').reverse().toArray()
+            // First, load existing local chats and filter by current user
+            const allLocalChats = await db.chats.orderBy('updatedAt').reverse().toArray()
+            
+            // Filter out chats that don't belong to the current user
+            const userLocalChats = allLocalChats.filter(chat => chat.userId === user.id)
+            
+            // Delete chats that don't belong to the current user
+            const otherUserChats = allLocalChats.filter(chat => chat.userId !== user.id)
+            for (const chat of otherUserChats) {
+                if (chat.id) {
+                    // Delete the chat and its associated messages
+                    await db.messages.where('chatId').equals(chat.id).delete()
+                    await db.chats.delete(chat.id)
+                }
+            }
             
             // Fetch chats from backend
             const response = await fetch(`${getBackendUrl()}/api/chats?userId=${user.id}`, {
@@ -32,7 +45,7 @@ export const useChat = () => {
                 const backendChats = await response.json()
                 
                 // Create a map of existing local chats by ID for efficient lookup
-                const localChatMap = new Map(localChats.map(chat => [chat.id, chat]))
+                const localChatMap = new Map(userLocalChats.map(chat => [chat.id, chat]))
                 
                 // Consolidate: update existing chats and add new ones from backend
                 for (const backendChat of backendChats) {
@@ -63,14 +76,15 @@ export const useChat = () => {
                 const allChats = await db.chats.orderBy('updatedAt').reverse().toArray()
                 setChats(allChats)
             } else {
-                // Fallback to local data if backend is unavailable
-                setChats(localChats)
+                // Fallback to filtered local data if backend is unavailable
+                setChats(userLocalChats)
             }
         } catch (error) {
-            console.error('Error loading chats from backend:', error)
-            // Fallback to local data
+            // Fallback to filtered local data
             const allChats = await db.chats.orderBy('updatedAt').reverse().toArray()
-            setChats(allChats)
+            const userChats = allChats.filter(chat => chat.userId === user.id)
+            setChats(userChats)
+            console.error('Error fetching chats:', error)
         }
     }, [user])
 

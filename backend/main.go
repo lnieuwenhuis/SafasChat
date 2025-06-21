@@ -44,6 +44,7 @@ func main() {
 			"https://chat.safasfly.dev",
 			"https://safasfly.dev",
 			"https://www.safasfly.dev",
+			"https://ai.safasfly.dev"
 		}
 	}
 
