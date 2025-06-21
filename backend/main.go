@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"strings"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -29,9 +30,26 @@ func main() {
 	// Setup Gin router
 	r := gin.Default()
 
+	allowedOriginsEnv := os.Getenv("CORS_ALLOWED_ORIGINS")
+	var allowedList []string
+
+	if allowedOriginsEnv != "" {
+		allowedList = strings.Split(allowedOriginsEnv, ",")
+
+		for i, origin := range allowedList {
+			allowedList[i] = strings.TrimSpace(origin)
+		}
+	} else {
+		allowedList = []string{
+			"https://chat.safasfly.dev",
+			"https://safasfly.dev",
+			"https://www.safasfly.dev",
+		}
+	}
+
 	// CORS middleware
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowOrigins: 	  allowedList,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "Cookie"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -66,7 +84,7 @@ func main() {
 		api.POST("/sync", chatService.SyncChatData)
 	}
 
-	port := os.Getenv("PORT")
+	port := os.Getenv("BACKEND_PORT")
 	if port == "" {
 		port = "3000"
 	}
