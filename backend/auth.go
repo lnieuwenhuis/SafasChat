@@ -45,10 +45,18 @@ type GoogleUserInfo struct {
 }
 
 func NewAuthService(db *sql.DB) *AuthService {
+	clientId := os.Getenv("GOOGLE_CLIENT_ID")
+	clientSecret := os.Getenv("GOOGLE_CLIENT_SECRET")
+	backendURL := os.Getenv("BACKEND_URL")
+
+	if clientId == "" || clientSecret == "" || backendURL == "" {
+		panic("Missing required environment variables")
+	}
+
 	googleConfig := &oauth2.Config{
-		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-		RedirectURL:  "http://localhost:3000/api/auth/callback/google",
+		ClientID:     clientId,
+		ClientSecret: clientSecret,
+		RedirectURL:  backendURL + "/api/auth/callback/google",
 		Scopes:       []string{"openid", "email", "profile"},
 		Endpoint:     google.Endpoint,
 	}

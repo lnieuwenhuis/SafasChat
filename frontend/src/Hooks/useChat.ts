@@ -11,6 +11,10 @@ export const useChat = () => {
     const [streamingService] = useState(() => new StreamingService())
     const {user} = useAuth()
 
+    const getBackendUrl = () => {
+        return import.meta.env.VITE_BACKEND_URL || 'http://localhost:3001';
+    }
+
     // Load chats from database
     const loadChats = useCallback(async () => {
         if (!user) return
@@ -20,7 +24,7 @@ export const useChat = () => {
             const localChats = await db.chats.orderBy('updatedAt').reverse().toArray()
             
             // Fetch chats from backend
-            const response = await fetch(`http://localhost:3000/api/chats?userId=${user.id}`, {
+            const response = await fetch(`${getBackendUrl()}/api/chats?userId=${user.id}`, {
                 credentials: 'include'
             })
             
@@ -162,7 +166,7 @@ export const useChat = () => {
                 .toArray()
             
             // Sync to backend
-            const response = await fetch('http://localhost:3000/api/sync', {
+            const response = await fetch(`${getBackendUrl()}/api/sync`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -363,7 +367,7 @@ export const useChat = () => {
     const deleteChat = useCallback(async (chatId: number) => {
         try {
             // First, delete from backend
-            const response = await fetch(`http://localhost:3000/api/chats/${chatId}`, {
+            const response = await fetch(`${getBackendUrl()}/api/chats/${chatId}`, {
                 method: 'DELETE',
                 credentials: 'include'
             })

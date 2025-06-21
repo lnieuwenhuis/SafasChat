@@ -21,27 +21,43 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
 
+    const getBackendUrl = () => {
+        return import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000';
+    }
+
     useEffect(() => {
-        // Check for existing session
-        fetch('http://localhost:3000/api/auth/session', {
-            credentials: 'include'
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.data?.user) {
-                setUser(data.data.user)
+    // Check for existing session
+        const checkSession = async () => {
+            try {
+                const backendUrl = getBackendUrl()
+                const response = await fetch(`${backendUrl}/api/auth/session`, {
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+                })
+                
+                if (response.ok) {
+                const data = await response.json()
+                if (data.data?.user) {
+                    setUser(data.data.user)
+                }
+                }
+            } catch (error) {
+                console.error('Session check failed:', error)
+            } finally {
+                setLoading(false)
             }
-            setLoading(false)
-        })
-        .catch(error => {
-            console.error('Session check failed:', error)
-            setLoading(false)
-        })
+        }
+
+    checkSession()
     }, [])
 
     const signIn = async () => {
         try {
-            const response = await fetch('http://localhost:3000/api/auth/sign-in/social', {
+            const backendUrl = getBackendUrl()
+            const response = await fetch(`${backendUrl}/api/auth/sign-in/social`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -64,7 +80,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const signOut = async () => {
         try {
-            await fetch('http://localhost:3000/api/auth/sign-out', {
+            const backendUrl = getBackendUrl()
+            await fetch(`${backendUrl}/api/auth/sign-out`, {
                 method: 'POST',
                 credentials: 'include'
             })
