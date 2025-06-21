@@ -11,7 +11,7 @@ services:
       MYSQL_USER: local
       MYSQL_PASSWORD: development
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
