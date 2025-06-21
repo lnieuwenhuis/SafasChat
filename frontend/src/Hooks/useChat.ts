@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { db, type Chat, type Message } from '../lib/database'
 import { StreamingService } from '../lib/streamingService'
+import { useAuth } from '../contexts/AuthContext'
 
 export const useChat = () => {
     const [chats, setChats] = useState<Chat[]>([])
@@ -8,12 +9,66 @@ export const useChat = () => {
     const [messages, setMessages] = useState<Message[]>([])
     const [isStreaming, setIsStreaming] = useState(false)
     const [streamingService] = useState(() => new StreamingService())
+    const {user} = useAuth()
 
     // Load chats from database
     const loadChats = useCallback(async () => {
-        const allChats = await db.chats.orderBy('updatedAt').reverse().toArray()
-        setChats(allChats)
-    }, [])
+        if (!user) return
+        
+        try {
+            // First, load existing local chats
+            const localChats = await db.chats.orderBy('updatedAt').reverse().toArray()
+            
+            // Fetch chats from backend
+            const response = await fetch(`http://localhost:3000/api/chats?userId=${user.id}`, {
+                credentials: 'include'
+            })
+            
+            if (response.ok) {
+                const backendChats = await response.json()
+                
+                // Create a map of existing local chats by ID for efficient lookup
+                const localChatMap = new Map(localChats.map(chat => [chat.id, chat]))
+                
+                // Consolidate: update existing chats and add new ones from backend
+                for (const backendChat of backendChats) {
+                    const chatData = {
+                        id: backendChat.id,
+                        title: backendChat.title,
+                        model: backendChat.model,
+                        userId: backendChat.userId,
+                        createdAt: new Date(backendChat.createdAt),
+                        updatedAt: new Date(backendChat.updatedAt)
+                    }
+                    
+                    if (localChatMap.has(backendChat.id)) {
+                        // Update existing chat if backend version is newer
+                        const localChat = localChatMap.get(backendChat.id)
+
+                        if (!localChat) continue
+                        if (new Date(backendChat.updatedAt) > localChat.updatedAt) {
+                            await db.chats.update(backendChat.id, chatData)
+                        }
+                    } else {
+                        // Add new chat from backend
+                        await db.chats.add(chatData)
+                    }
+                }
+                
+                // Update local state with consolidated data
+                const allChats = await db.chats.orderBy('updatedAt').reverse().toArray()
+                setChats(allChats)
+            } else {
+                // Fallback to local data if backend is unavailable
+                setChats(localChats)
+            }
+        } catch (error) {
+            console.error('Error loading chats from backend:', error)
+            // Fallback to local data
+            const allChats = await db.chats.orderBy('updatedAt').reverse().toArray()
+            setChats(allChats)
+        }
+    }, [user])
 
     // Load messages for a specific chat
     const loadMessages = useCallback(async (chatId: number) => {
@@ -27,10 +82,13 @@ export const useChat = () => {
 
     // Create new chat
     const createNewChat = useCallback(async (title: string = 'New Chat', model: string = 'openai/gpt-4o') => {
+        if (!user) return
+        
         const now = new Date()
         const chatId = await db.chats.add({
         title,
         model,
+        userId: user.id,
         createdAt: now,
         updatedAt: now
         })
@@ -39,7 +97,7 @@ export const useChat = () => {
         setCurrentChatId(chatId)
         setMessages([])
         return chatId
-    }, [loadChats])
+    }, [loadChats, user])
 
     // Generate title using Mistral API
     const generateTitle = useCallback(async (userMessage: string, apiKey: string): Promise<string> => {
@@ -87,6 +145,58 @@ export const useChat = () => {
             return userMessage.split(' ').slice(0, 4).join(' ') + (userMessage.split(' ').length > 4 ? '...' : '')
         }
     }, [])
+
+    // Sync local data to backend
+    const syncToBackend = useCallback(async (chatId: number) => {
+        if (!user) return
+        
+        try {
+            // Get chat data
+            const chat = await db.chats.get(chatId)
+            if (!chat) return
+            
+            // Get all messages for this chat
+            const messages = await db.messages
+                .where('chatId')
+                .equals(chatId)
+                .toArray()
+            
+            // Sync to backend
+            const response = await fetch('http://localhost:3000/api/sync', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    chat: {
+                        id: chat.id,
+                        title: chat.title,
+                        model: chat.model,
+                        userId: chat.userId,
+                        createdAt: chat.createdAt,
+                        updatedAt: chat.updatedAt
+                    },
+                    messages: messages.map(msg => ({
+                        id: msg.id,
+                        chatId: msg.chatId,
+                        content: msg.content,
+                        role: msg.role,
+                        isStreaming: msg.isStreaming || false,
+                        reasoning: msg.reasoning || '',
+                        timestamp: msg.timestamp,
+                        createdAt: msg.timestamp // Use timestamp as createdAt
+                    }))
+                })
+            })
+            
+            if (!response.ok) {
+                console.error('Failed to sync to backend:', response.statusText)
+            }
+        } catch (error) {
+            console.error('Error syncing to backend:', error)
+        }
+    }, [user])
 
     // Send message with streaming
     const sendMessage = useCallback(async (content: string, apiKey: string, model: string) => {
@@ -217,6 +327,10 @@ export const useChat = () => {
                 })
                 
                 setIsStreaming(false)
+                
+                // Sync to backend after streaming is complete
+                await syncToBackend(currentChatId)
+                
                 await loadChats()
             },
             onError: async (error: Error) => {
@@ -237,7 +351,7 @@ export const useChat = () => {
                 setIsStreaming(false)
             }
         })
-    }, [currentChatId, isStreaming, streamingService, loadChats, generateTitle])
+    }, [currentChatId, isStreaming, streamingService, loadChats, generateTitle, syncToBackend])
 
     // Select chat
     const selectChat = useCallback(async (chatId: number) => {
@@ -247,15 +361,33 @@ export const useChat = () => {
 
     // Delete chat
     const deleteChat = useCallback(async (chatId: number) => {
-        await db.messages.where('chatId').equals(chatId).delete()
-        await db.chats.delete(chatId)
-        
-        if (currentChatId === chatId) {
-        setCurrentChatId(null)
-        setMessages([])
+        try {
+            // First, delete from backend
+            const response = await fetch(`http://localhost:3000/api/chats/${chatId}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            })
+            
+            if (!response.ok) {
+                console.error('Failed to delete chat from backend:', response.statusText)
+                // You might want to show an error message to the user here
+                return
+            }
+            
+            // If backend deletion successful, delete locally
+            await db.messages.where('chatId').equals(chatId).delete()
+            await db.chats.delete(chatId)
+            
+            if (currentChatId === chatId) {
+                setCurrentChatId(null)
+                setMessages([])
+            }
+            
+            await loadChats()
+        } catch (error) {
+            console.error('Error deleting chat:', error)
+            // You might want to show an error message to the user here
         }
-        
-        await loadChats()
     }, [currentChatId, loadChats])
 
     // Stop streaming
@@ -278,6 +410,6 @@ export const useChat = () => {
         sendMessage,
         deleteChat,
         stopStreaming,
-        loadChats
+        syncToBackend 
     }
 }

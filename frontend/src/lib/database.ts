@@ -4,6 +4,7 @@ export interface Chat {
     id?: number
     title: string
     model: string
+    userId: string
     createdAt: Date
     updatedAt: Date
     }

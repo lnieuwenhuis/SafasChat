@@ -22,8 +22,9 @@ func main() {
 	}
 	defer db.Close()
 
-	// Initialize auth service
+	// Initialize services
 	authService := NewAuthService(db)
+	chatService := NewChatService(db)
 
 	// Setup Gin router
 	r := gin.Default()
@@ -38,12 +39,31 @@ func main() {
 	}))
 
 	// Auth routes
-	api := r.Group("/api/auth")
+	auth := r.Group("/api/auth")
 	{
-		api.GET("/session", authService.GetSession)
-		api.POST("/sign-in/social", authService.SignInSocial)
-		api.GET("/callback/google", authService.GoogleCallback)
-		api.POST("/sign-out", authService.SignOut)
+		auth.GET("/session", authService.GetSession)
+		auth.POST("/sign-in/social", authService.SignInSocial)
+		auth.GET("/callback/google", authService.GoogleCallback)
+		auth.POST("/sign-out", authService.SignOut)
+	}
+
+	// Chat routes
+	api := r.Group("/api")
+	{
+		// Chat endpoints
+		api.POST("/chats", chatService.CreateChat)
+		api.GET("/chats", chatService.GetChats)
+		api.GET("/chats/:id", chatService.GetChat)
+		api.PUT("/chats/:id", chatService.UpdateChat)
+		api.DELETE("/chats/:id", chatService.DeleteChat)
+		api.GET("/chats/:id/messages", chatService.GetMessages)
+
+		// Message endpoints
+		api.POST("/messages", chatService.CreateMessage)
+		api.PUT("/messages/:id", chatService.UpdateMessage)
+		
+		// Sync endpoint
+		api.POST("/sync", chatService.SyncChatData)
 	}
 
 	port := os.Getenv("PORT")
