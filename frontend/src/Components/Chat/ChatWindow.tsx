@@ -13,6 +13,14 @@ interface ChatWindowProps {
 
 // Available free models with descriptions and characteristics
 const FREE_MODELS = [
+    {
+        id: 'moonshotai/kimi-k2:free',
+        name: 'Kimi K2',
+        description: 'An open-weight Mixture-of-Experts model',
+        speed: 'Fast',
+        quality: 'Very High',
+        reasoning: false
+    },
     { 
         id: 'deepseek/deepseek-chat-v3-0324:free', 
         name: 'DeepSeek V3',
