@@ -14,43 +14,19 @@ interface ChatWindowProps {
 // Available free models with descriptions and characteristics
 const FREE_MODELS = [
     {
-        id: 'moonshotai/kimi-k2:free',
-        name: 'Kimi K2',
-        description: 'An open-weight Mixture-of-Experts model',
+        id: 'openrouter/aurora-alpha',
+        name: 'Aurora Alpha',
+        description: 'A new fast stealth model',
         speed: 'Fast',
-        quality: 'Very High',
-        reasoning: false
-    },
-    { 
-        id: 'deepseek/deepseek-chat-v3-0324:free', 
-        name: 'DeepSeek V3',
-        description: 'General-purpose conversational AI model',
-        speed: 'Medium',
-        quality: 'High',
-        reasoning: false
-    },
-    {
-        id: 'deepseek/deepseek-r1-0528:free',
-        name: 'DeepSeek R1 (0528)',
-        description: 'May 28th update to the original DeepSeek R1',
-        speed: 'Medium',
         quality: 'Very High',
         reasoning: true
     },
     { 
-        id: 'deepseek/deepseek-r1-distill-qwen-32b:free', 
-        name: 'DeepSeek R1 Qwen 32B',
-        description: 'Qwen distilled version of Deepseek R1',
-        speed: 'Fast',
-        quality: 'High',
-        reasoning: true
-    },
-    { 
-        id: 'deepseek/deepseek-r1-distill-llama-70b:free', 
-        name: 'DeepSeek R1 Llama 70B',
-        description: 'Llama distilled version of Deepseek R1',
+        id: 'arcee-ai/trinity-large-preview:free', 
+        name: 'Arcee AI Trinity Large (P)',
+        description: '400B Parameter Open-Weight MoE Model',
         speed: 'Medium',
-        quality: 'Very High',
+        quality: 'High',
         reasoning: true
     },
     { 
